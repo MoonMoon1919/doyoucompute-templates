@@ -5,6 +5,7 @@ import (
 
 	"github.com/MoonMoon1919/doyoucompute"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/bugreport"
+	"github.com/MoonMoon1919/doyoucompute-templates/pkg/pullrequest"
 	"github.com/MoonMoon1919/doyoucompute/pkg/app"
 )
 
@@ -22,7 +23,13 @@ func main() {
 		panic(err)
 	}
 
+	pullrequest, err := pullrequest.New()
+	if err != nil {
+		panic(err)
+	}
+
 	app.Register(bugreport)
+	app.Register(pullrequest)
 
 	app.Run(os.Args)
 }
