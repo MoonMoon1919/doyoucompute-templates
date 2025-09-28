@@ -63,6 +63,62 @@ func DefaultName() string {
 	return "Contributing"
 }
 
+func WithChoseATask(task doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
+	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+		p.choseATask = task
+
+		return nil, nil
+	}
+}
+
+func WithSetup(setup doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
+	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+		p.setup = setup
+
+		return nil, nil
+	}
+}
+
+func WithDevelopment(development doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
+	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+		p.development = development
+
+		return nil, nil
+	}
+}
+
+func WithSubmissions(submissions doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
+	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+		p.submissions = submissions
+
+		return nil, nil
+	}
+}
+
+func WithWritingDocs(docs doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
+	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+		p.writingDocs = docs
+
+		return nil, nil
+	}
+}
+
+func WithReportingbugs(bugs doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
+	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+		p.reportingbugs = bugs
+
+		return nil, nil
+	}
+}
+
+func WithLicense(license doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
+	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+		p.license = license
+
+		return nil, nil
+	}
+}
+
 func DefaultGettingStarted() doyoucompute.Section {
 	return helpers.SectionFactory("Getting started", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
