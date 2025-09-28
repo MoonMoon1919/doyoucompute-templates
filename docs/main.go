@@ -7,6 +7,7 @@ import (
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/bugreport"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/contributing"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/pullrequest"
+	"github.com/MoonMoon1919/doyoucompute-templates/pkg/readme"
 	"github.com/MoonMoon1919/doyoucompute/pkg/app"
 )
 
@@ -33,11 +34,26 @@ func main() {
 		"https://github.com/MoonMoon1919/doyoucompute-templates",
 		"https://github.com/MoonMoon1919/doyoucompute-templates/issues",
 	)
-
 	if err != nil {
 		panic(err)
 	}
 
+	readme, err := readme.New(
+		readme.ReadmeProps{
+			Name: "DOYOUCOMPUTE-TEMPLATES",
+			Intro: *doyoucompute.NewParagraph().
+				Text("Templates for common documents created by").
+				Link("doyoucompute", "https://github.com/MoonMoon1919/doyoucompute"),
+			Features:   doyoucompute.NewSection("Features"),
+			QuickStart: doyoucompute.NewSection("Quickstart"),
+		},
+		[]doyoucompute.Section{},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	app.Register(readme)
 	app.Register(bugreport)
 	app.Register(pullrequest)
 	app.Register(contributing)
