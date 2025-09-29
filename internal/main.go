@@ -4,10 +4,10 @@ import (
 	"os"
 
 	"github.com/MoonMoon1919/doyoucompute"
+	"github.com/MoonMoon1919/doyoucompute-templates/internal/docs"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/bugreport"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/contributing"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/pullrequest"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/readme"
 	"github.com/MoonMoon1919/doyoucompute/pkg/app"
 )
 
@@ -38,17 +38,7 @@ func main() {
 		panic(err)
 	}
 
-	readme, err := readme.New(
-		readme.ReadmeProps{
-			Name: "DOYOUCOMPUTE-TEMPLATES",
-			Intro: *doyoucompute.NewParagraph().
-				Text("Templates for common documents created by").
-				Link("doyoucompute", "https://github.com/MoonMoon1919/doyoucompute"),
-			Features:   doyoucompute.NewSection("Features"),
-			QuickStart: doyoucompute.NewSection("Quickstart"),
-		},
-		[]doyoucompute.Section{},
-	)
+	readme, err := docs.ReadMe()
 	if err != nil {
 		panic(err)
 	}

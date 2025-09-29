@@ -63,12 +63,14 @@ func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...h
 		d.AddIntro(&sProps.Intro)
 		d.AddSection(sProps.Features)
 		d.AddSection(sProps.QuickStart)
-		d.AddSection(sProps.contributing)
-		d.AddSection(sProps.license)
 
 		for _, section := range additionalSections {
 			d.AddSection(section)
 		}
+
+		// Always put contributing and license last in the document
+		d.AddSection(sProps.contributing)
+		d.AddSection(sProps.license)
 
 		return nil
 	})
