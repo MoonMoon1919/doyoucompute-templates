@@ -1,3 +1,21 @@
+// Package pullrequest provides a template for creating pull request documents.
+//
+// This package generates structured pull request templates with sections for
+// describing changes, linking related issues, and explaining testing approaches.
+//
+// Basic usage:
+//
+//	doc, err := pullrequest.New()
+//	if err != nil {
+//		// handle error
+//	}
+//
+// Customizing sections:
+//
+//	doc, err := pullrequest.New(
+//		pullrequest.WithName("Feature PR"),
+//		pullrequest.WithDescription(customSection),
+//	)
 package pullrequest
 
 import (
@@ -12,6 +30,11 @@ type pullRequestProps struct {
 	testing      doyoucompute.Section
 }
 
+// WithName overrides the document name.
+//
+// Example:
+//
+//	pullrequest.WithName("Feature: Add authentication")
 func WithName(name string) helpers.OptionsFunc[pullRequestProps] {
 	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
 		p.name = name
@@ -20,6 +43,14 @@ func WithName(name string) helpers.OptionsFunc[pullRequestProps] {
 	}
 }
 
+// WithDescription overrides the description section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Description")
+//	section.WriteParagraph().Text("Added OAuth2 authentication")
+//	pullrequest.WithDescription(section)
 func WithDescription(description doyoucompute.Section) helpers.OptionsFunc[pullRequestProps] {
 	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
 		p.description = description
@@ -28,6 +59,14 @@ func WithDescription(description doyoucompute.Section) helpers.OptionsFunc[pullR
 	}
 }
 
+// WithRelatedIssue overrides the related issue section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Related issue")
+//	section.WriteParagraph().Text("Fixes #123")
+//	pullrequest.WithRelatedIssue(section)
 func WithRelatedIssue(relatedIssue doyoucompute.Section) helpers.OptionsFunc[pullRequestProps] {
 	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
 		p.relatedIssue = relatedIssue
@@ -36,6 +75,14 @@ func WithRelatedIssue(relatedIssue doyoucompute.Section) helpers.OptionsFunc[pul
 	}
 }
 
+// WithTesting overrides the testing section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Testing")
+//	section.WriteParagraph().Text("Added unit tests and integration tests")
+//	pullrequest.WithTesting(section)
 func WithTesting(testing doyoucompute.Section) helpers.OptionsFunc[pullRequestProps] {
 	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
 		p.testing = testing
@@ -44,10 +91,12 @@ func WithTesting(testing doyoucompute.Section) helpers.OptionsFunc[pullRequestPr
 	}
 }
 
+// DefaultName returns the default document name.
 func DefaultName() string {
 	return "Pull Request"
 }
 
+// DefaultDescription returns the default description section.
 func DefaultDescription() doyoucompute.Section {
 	return helpers.SectionFactory("Description", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("What is this change and why are you making it?")
@@ -55,6 +104,7 @@ func DefaultDescription() doyoucompute.Section {
 	})
 }
 
+// DefaultRelatedIssue returns the default related issue section.
 func DefaultRelatedIssue() doyoucompute.Section {
 	return helpers.SectionFactory("Related issue", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("Link to the relevant issue here.")
@@ -62,6 +112,7 @@ func DefaultRelatedIssue() doyoucompute.Section {
 	})
 }
 
+// DefaultTesting returns the default testing section.
 func DefaultTesting() doyoucompute.Section {
 	return helpers.SectionFactory("How I tested", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("How did you test these changes?")
@@ -69,6 +120,15 @@ func DefaultTesting() doyoucompute.Section {
 	})
 }
 
+// New creates a new pull request document with default sections.
+// Accepts zero or more option functions to customize the document.
+//
+// Example:
+//
+//	doc, err := pullrequest.New(
+//		pullrequest.WithName("Bug Fix PR"),
+//		pullrequest.WithTesting(customTestingSection),
+//	)
 func New(opts ...helpers.OptionsFunc[pullRequestProps]) (doyoucompute.Document, error) {
 	props := pullRequestProps{
 		name:         DefaultName(),

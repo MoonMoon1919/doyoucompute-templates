@@ -1,3 +1,27 @@
+// Package contributing provides a template for creating CONTRIBUTING.md documents.
+//
+// This package generates structured contribution guidelines for open source projects,
+// including sections on setup, development workflow, submitting changes, reporting bugs,
+// and writing documentation.
+//
+// Basic usage:
+//
+//	doc, err := contributing.New(
+//		"https://github.com/username/project",
+//		"https://github.com/username/project/issues",
+//	)
+//	if err != nil {
+//		// handle error
+//	}
+//
+// Customizing sections:
+//
+//	doc, err := contributing.New(
+//		"https://github.com/username/project",
+//		"https://github.com/username/project/issues",
+//		contributing.WithName("Contributing Guidelines"),
+//		contributing.WithSetup(customSetupSection),
+//	)
 package contributing
 
 import (
@@ -22,6 +46,16 @@ type contributingProps struct {
 	license         doyoucompute.Section
 }
 
+// DefaultName returns the default document name.
+func DefaultName() string {
+	return "Contributing"
+}
+
+// WithName overrides the document name.
+//
+// Example:
+//
+//	contributing.WithName("Contributing Guidelines")
 func WithName(name string) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.name = name
@@ -30,6 +64,11 @@ func WithName(name string) helpers.OptionsFunc[contributingProps] {
 	}
 }
 
+// WithProjectUrl overrides the project URL.
+//
+// Example:
+//
+//	contributing.WithProjectUrl("https://github.com/username/project")
 func WithProjectUrl(url string) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.projectUrl = url
@@ -38,6 +77,11 @@ func WithProjectUrl(url string) helpers.OptionsFunc[contributingProps] {
 	}
 }
 
+// WithIssueTrackerUrl overrides the issue tracker URL and updates dependent sections.
+//
+// Example:
+//
+//	contributing.WithIssueTrackerUrl("https://github.com/username/project/issues")
 func WithIssueTrackerUrl(url string) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.issueTrackerUrl = url
@@ -51,6 +95,14 @@ func WithIssueTrackerUrl(url string) helpers.OptionsFunc[contributingProps] {
 	}
 }
 
+// WithGettingStarted overrides the getting started section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Getting started")
+//	section.WriteParagraph().Text("Read our documentation first")
+//	contributing.WithGettingStarted(section)
 func WithGettingStarted(gettingStarted doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.gettingStarted = gettingStarted
@@ -59,10 +111,14 @@ func WithGettingStarted(gettingStarted doyoucompute.Section) helpers.OptionsFunc
 	}
 }
 
-func DefaultName() string {
-	return "Contributing"
-}
-
+// WithChoseATask overrides the task selection section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Find a task")
+//	section.WriteParagraph().Text("Check our project board")
+//	contributing.WithChoseATask(section)
 func WithChoseATask(task doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.choseATask = task
@@ -71,6 +127,14 @@ func WithChoseATask(task doyoucompute.Section) helpers.OptionsFunc[contributingP
 	}
 }
 
+// WithSetup overrides the setup section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Setup")
+//	section.WriteParagraph().Text("Install Docker first")
+//	contributing.WithSetup(section)
 func WithSetup(setup doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.setup = setup
@@ -79,6 +143,14 @@ func WithSetup(setup doyoucompute.Section) helpers.OptionsFunc[contributingProps
 	}
 }
 
+// WithDevelopment overrides the development workflow section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Development")
+//	section.WriteParagraph().Text("Use our pre-commit hooks")
+//	contributing.WithDevelopment(section)
 func WithDevelopment(development doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.development = development
@@ -87,6 +159,14 @@ func WithDevelopment(development doyoucompute.Section) helpers.OptionsFunc[contr
 	}
 }
 
+// WithSubmissions overrides the submissions section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Submitting PRs")
+//	section.WriteParagraph().Text("Ensure CI passes before requesting review")
+//	contributing.WithSubmissions(section)
 func WithSubmissions(submissions doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.submissions = submissions
@@ -95,6 +175,14 @@ func WithSubmissions(submissions doyoucompute.Section) helpers.OptionsFunc[contr
 	}
 }
 
+// WithWritingDocs overrides the documentation writing section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Documentation")
+//	section.WriteParagraph().Text("We use MkDocs for documentation")
+//	contributing.WithWritingDocs(section)
 func WithWritingDocs(docs doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.writingDocs = docs
@@ -103,6 +191,14 @@ func WithWritingDocs(docs doyoucompute.Section) helpers.OptionsFunc[contributing
 	}
 }
 
+// WithReportingbugs overrides the bug reporting section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("Bug Reports")
+//	section.WriteParagraph().Text("Include system information")
+//	contributing.WithReportingbugs(section)
 func WithReportingbugs(bugs doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.reportingbugs = bugs
@@ -111,6 +207,14 @@ func WithReportingbugs(bugs doyoucompute.Section) helpers.OptionsFunc[contributi
 	}
 }
 
+// WithLicense overrides the license section.
+// This replaces the entire section, including the title.
+//
+// Example:
+//
+//	section := doyoucompute.NewSection("License")
+//	section.WriteParagraph().Text("MIT License applies")
+//	contributing.WithLicense(section)
 func WithLicense(license doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
 	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
 		p.license = license
@@ -119,6 +223,7 @@ func WithLicense(license doyoucompute.Section) helpers.OptionsFunc[contributingP
 	}
 }
 
+// DefaultGettingStarted returns the default getting started section.
 func DefaultGettingStarted() doyoucompute.Section {
 	return helpers.SectionFactory("Getting started", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
@@ -130,6 +235,7 @@ func DefaultGettingStarted() doyoucompute.Section {
 	})
 }
 
+// DefaultChoseATask returns the default task selection section.
 func DefaultChoseATask(issueTrackerUrl string) doyoucompute.Section {
 	return helpers.SectionFactory("Find a task", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
@@ -150,6 +256,7 @@ func DefaultChoseATask(issueTrackerUrl string) doyoucompute.Section {
 	})
 }
 
+// DefaultLicense returns the default license section.
 func DefaultLicense() doyoucompute.Section {
 	return helpers.SectionFactory("License", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
@@ -160,6 +267,7 @@ func DefaultLicense() doyoucompute.Section {
 	})
 }
 
+// DefaultWritingDocs returns the default documentation writing section.
 func DefaultWritingDocs() doyoucompute.Section {
 	return helpers.SectionFactory("Writing documentation", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
@@ -175,6 +283,7 @@ func DefaultWritingDocs() doyoucompute.Section {
 	})
 }
 
+// DefaultReportingBugs returns the default bug reporting section.
 func DefaultReportingBugs(issueTrackerUrl string) doyoucompute.Section {
 	return helpers.SectionFactory("Reporting bugs", func(s doyoucompute.Section) doyoucompute.Section {
 		checkingSection := s.CreateSection("Checking for Existing Reports")
@@ -193,6 +302,7 @@ func DefaultReportingBugs(issueTrackerUrl string) doyoucompute.Section {
 	})
 }
 
+// DefaultOpenSourceGoSetupGuidelines returns the default setup section for Go projects.
 func DefaultOpenSourceGoSetupGuidelines(projectUrl string, projectName string) doyoucompute.Section {
 	return helpers.SectionFactory("Setting Up Your Development Environment", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
@@ -216,6 +326,7 @@ func DefaultOpenSourceGoSetupGuidelines(projectUrl string, projectName string) d
 	})
 }
 
+// DefaultOpenSourceGoDevelopmentGuidelines returns the default development workflow section for Go projects.
 func DefaultOpenSourceGoDevelopmentGuidelines() doyoucompute.Section {
 	return helpers.SectionFactory("Development Workflow", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
@@ -235,6 +346,7 @@ func DefaultOpenSourceGoDevelopmentGuidelines() doyoucompute.Section {
 	})
 }
 
+// DefaultOpenSourceSubmittingGuidelines returns the default submission guidelines section.
 func DefaultOpenSourceSubmittingGuidelines() doyoucompute.Section {
 	return helpers.SectionFactory("Submitting your changes", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteParagraph().
@@ -262,6 +374,19 @@ func DefaultOpenSourceSubmittingGuidelines() doyoucompute.Section {
 	})
 }
 
+// New creates a new contributing guidelines document with default sections for Go projects.
+// Accepts zero or more option functions to customize the document.
+//
+// The projectUrl is used to generate setup instructions and is parsed to extract the project name.
+// The issueTrackerUrl is used in task selection and bug reporting sections.
+//
+// Example:
+//
+//	doc, err := contributing.New(
+//		"https://github.com/username/project",
+//		"https://github.com/username/project/issues",
+//		contributing.WithName("How to Contribute"),
+//	)
 func New(projectUrl, issueTrackerUrl string, opts ...helpers.OptionsFunc[contributingProps]) (doyoucompute.Document, error) {
 	projectNameSplitter := strings.Split(projectUrl, "/")
 	projectName := projectNameSplitter[len(projectNameSplitter)-1]

@@ -1,3 +1,22 @@
+// Package bugreport provides a template for creating bug report documents.
+//
+// This package is part of doyoucompute-templates and uses the doyoucompute
+// library to generate structured bug report documents with customizable sections.
+//
+// Basic usage:
+//
+//	doc, err := bugreport.New()
+//	if err != nil {
+//		// handle error
+//	}
+//
+// Customizing sections:
+//
+//	doc, err := bugreport.New(
+//		bugreport.WithName("Critical Bug"),
+//		bugreport.WithExpectedBehavior(customSection),
+//		bugreport.WithActualBehavior(customSection),
+//	)
 package bugreport
 
 import (
@@ -38,8 +57,8 @@ func WithFrontMatter(frontmatter doyoucompute.Frontmatter) helpers.OptionsFunc[b
 	}
 }
 
-// Overrides the default expected behavior section of the document
-// This overrides the entire section, including the section title
+// WithExpectedBehavior overrides the default expected behavior section.
+// This replaces the entire section, including the title.
 //
 // Example:
 //
@@ -54,8 +73,8 @@ func WithExpectedBehavior(behavior doyoucompute.Section) helpers.OptionsFunc[bug
 	}
 }
 
-// Overrides the default actual behavior section of the document
-// This overrides the entire section, including the section title
+// WithActualBehavior overrides the default actual behavior section.
+// This replaces the entire section, including the title.
 //
 // Example:
 //
@@ -70,8 +89,8 @@ func WithActualBehavior(behavior doyoucompute.Section) helpers.OptionsFunc[bugRe
 	}
 }
 
-// Overrides the default environment section of the document
-// This overrides the entire section, including the section title
+// WithEnvironmentDetails overrides the default environment section.
+// This replaces the entire section, including the title.
 //
 // Example:
 //
@@ -86,13 +105,15 @@ func WithEnvironmentDetails(env doyoucompute.Section) helpers.OptionsFunc[bugRep
 	}
 }
 
-// Overrides the default reproduction steps section of the document
-// This overrides the entire section, including the section title
+// WithReproductionSteps overrides the default reproduction steps section.
+// This replaces the entire section, including the title.
 //
 // Example:
 //
 //	section := doyoucompute.NewSection("Repro steps")
-//	// Add section content...
+//	list := section.CreateList(doyoucompute.NUMBERED)
+//	list.Append("Run the program")
+//	list.Append("Observe the error")
 //	bugreport.WithReproductionSteps(section)
 func WithReproductionSteps(reproSteps doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
 	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
@@ -102,13 +123,13 @@ func WithReproductionSteps(reproSteps doyoucompute.Section) helpers.OptionsFunc[
 	}
 }
 
-// Overrides the default code samples section of the document
-// This overrides the entire section, including the section title
+// WithCodeSamples overrides the default code samples section.
+// This replaces the entire section, including the title.
 //
 // Example:
 //
 //	section := doyoucompute.NewSection("Code samples")
-//	// Add section content...
+//	section.WriteCodeBlock("go", []string{"fmt.Println(\"bug\")"}, doyoucompute.Static)
 //	bugreport.WithCodeSamples(section)
 func WithCodeSamples(samples doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
 	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
@@ -118,8 +139,8 @@ func WithCodeSamples(samples doyoucompute.Section) helpers.OptionsFunc[bugReport
 	}
 }
 
-// Overrides the default errors section of the document
-// This overrides the entire section, including the section title
+// WithErrorDetails overrides the default errors section.
+// This replaces the entire section, including the title.
 //
 // Example:
 //
@@ -128,14 +149,13 @@ func WithCodeSamples(samples doyoucompute.Section) helpers.OptionsFunc[bugReport
 //	bugreport.WithErrorDetails(section)
 func WithErrorDetails(errDetails doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
 	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
-		p.environmentDetails = errDetails
+		p.errors = errDetails
 
 		return nil, nil
 	}
 }
 
-// Overrides the name of the document
-// This has a side effect of updating the name of the document in the frontmatter.
+// WithName overrides the document name and updates the frontmatter accordingly.
 //
 // Example:
 //
@@ -160,6 +180,7 @@ func WithName(name string) helpers.OptionsFunc[bugReportProps] {
 	}
 }
 
+// DefaultExpectedBehavior returns the default expected behavior section.
 func DefaultExpectedBehavior() doyoucompute.Section {
 	return helpers.SectionFactory("Expected behavior", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("What should happen?")
@@ -168,6 +189,7 @@ func DefaultExpectedBehavior() doyoucompute.Section {
 	})
 }
 
+// DefaultActualBehavior returns the default actual behavior section.
 func DefaultActualBehavior() doyoucompute.Section {
 	return helpers.SectionFactory("Actual behavior", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("What actually happens?")
@@ -176,6 +198,7 @@ func DefaultActualBehavior() doyoucompute.Section {
 	})
 }
 
+// DefaultEnvirionmentDetails returns the default environment details section.
 func DefaultEnvirionmentDetails() doyoucompute.Section {
 	return helpers.SectionFactory("Environment details", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("Tell us what go version, os, package version, etc.")
@@ -184,6 +207,7 @@ func DefaultEnvirionmentDetails() doyoucompute.Section {
 	})
 }
 
+// DefaultCodeSamples returns the default code samples section.
 func DefaultCodeSamples() doyoucompute.Section {
 	return helpers.SectionFactory("Code Samples", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("Share a snippet of code that demonstrates the bug.")
@@ -193,6 +217,7 @@ func DefaultCodeSamples() doyoucompute.Section {
 	})
 }
 
+// DefaultErrorMessages returns the default error messages section.
 func DefaultErrorMessages() doyoucompute.Section {
 	return helpers.SectionFactory("Error Messages", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("Add any relevant error messages/logs here.")
@@ -201,6 +226,7 @@ func DefaultErrorMessages() doyoucompute.Section {
 	})
 }
 
+// DefaultStepsToReproduce returns the default steps to reproduce section.
 func DefaultStepsToReproduce() doyoucompute.Section {
 	return helpers.SectionFactory("Steps to reproduce", func(s doyoucompute.Section) doyoucompute.Section {
 		reproList := s.CreateList(doyoucompute.NUMBERED)
@@ -212,6 +238,7 @@ func DefaultStepsToReproduce() doyoucompute.Section {
 	})
 }
 
+// DefaultFrontMatter returns the default frontmatter for bug reports.
 func DefaultFrontMatter() doyoucompute.Frontmatter {
 	return *doyoucompute.NewFrontmatter(map[string]interface{}{
 		"name":      DEFAULT_NAME,
@@ -222,9 +249,15 @@ func DefaultFrontMatter() doyoucompute.Frontmatter {
 	})
 }
 
-// New creates a new Bug Report document
-// Uses defaults for all sections by defualt
-// Takes in zero to many OptionsFunc to override defaults
+// New creates a new bug report document with default sections.
+// Accepts zero or more option functions to customize the document.
+//
+// Example:
+//
+//	doc, err := bugreport.New(
+//		bugreport.WithName("API Bug"),
+//		bugreport.WithExpectedBehavior(customSection),
+//	)
 func New(opts ...helpers.OptionsFunc[bugReportProps]) (doyoucompute.Document, error) {
 	props := bugReportProps{
 		name:               DEFAULT_NAME,
