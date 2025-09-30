@@ -388,8 +388,20 @@ func DefaultOpenSourceSubmittingGuidelines() doyoucompute.Section {
 //		contributing.WithName("How to Contribute"),
 //	)
 func New(projectUrl, issueTrackerUrl string, opts ...helpers.OptionsFunc[contributingProps]) (doyoucompute.Document, error) {
+	if projectUrl == "" {
+		return doyoucompute.Document{}, fmt.Errorf("projectUrl cannot be empty")
+	}
+	if issueTrackerUrl == "" {
+		return doyoucompute.Document{}, fmt.Errorf("issueTrackerUrl cannot be empty")
+	}
+
 	projectNameSplitter := strings.Split(projectUrl, "/")
 	projectName := projectNameSplitter[len(projectNameSplitter)-1]
+
+	// Validate project name was extracted
+	if projectName == "" {
+		return doyoucompute.Document{}, fmt.Errorf("could not extract project name from projectUrl: %s", projectUrl)
+	}
 
 	props := contributingProps{
 		name:            DefaultName(),
@@ -408,6 +420,11 @@ func New(projectUrl, issueTrackerUrl string, opts ...helpers.OptionsFunc[contrib
 	err := helpers.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
+	}
+
+	// Validate props after options applied
+	if props.name == "" {
+		return doyoucompute.Document{}, fmt.Errorf("contributing guide name cannot be empty")
 	}
 
 	return helpers.DocumentBuilder(props.name, func(d *doyoucompute.Document) error {

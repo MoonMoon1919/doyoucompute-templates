@@ -27,6 +27,8 @@
 package readme
 
 import (
+	"fmt"
+
 	"github.com/MoonMoon1919/doyoucompute"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
@@ -102,6 +104,17 @@ func DefaultLicense() doyoucompute.Section {
 //		readme.WithName("Project Documentation"),
 //	)
 func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...helpers.OptionsFunc[ReadmeProps]) (doyoucompute.Document, error) {
+	// Validate required fields
+	if props.Name == "" {
+		return doyoucompute.Document{}, fmt.Errorf("readme name cannot be empty")
+	}
+	if props.Features.Name == "" {
+		return doyoucompute.Document{}, fmt.Errorf("features section is required")
+	}
+	if props.QuickStart.Name == "" {
+		return doyoucompute.Document{}, fmt.Errorf("quick start section is required")
+	}
+
 	sProps := ReadmeProps{
 		Name:         props.Name,
 		Intro:        props.Intro,
@@ -114,6 +127,11 @@ func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...h
 	err := helpers.ApplyOptions(&sProps, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
+	}
+
+	// Validate after options applied
+	if sProps.Name == "" {
+		return doyoucompute.Document{}, fmt.Errorf("readme name cannot be empty after applying options")
 	}
 
 	return helpers.DocumentBuilder(sProps.Name, func(d *doyoucompute.Document) error {

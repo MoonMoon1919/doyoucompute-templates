@@ -222,6 +222,67 @@ func TestContributing(t *testing.T) {
 	}
 }
 
+func TestContributingValidation(t *testing.T) {
+	tests := []struct {
+		name            string
+		projectUrl      string
+		issueTrackerUrl string
+		opts            []helpers.OptionsFunc[contributingProps]
+		wantErr         bool
+		errMsg          string
+	}{
+		{
+			name:            "empty project URL should error",
+			projectUrl:      "",
+			issueTrackerUrl: "https://github.com/user/project/issues",
+			wantErr:         true,
+			errMsg:          "projectUrl cannot be empty",
+		},
+		{
+			name:            "empty issue tracker URL should error",
+			projectUrl:      "https://github.com/user/project",
+			issueTrackerUrl: "",
+			wantErr:         true,
+			errMsg:          "issueTrackerUrl cannot be empty",
+		},
+		{
+			name:            "invalid project URL should error",
+			projectUrl:      "https://github.com/",
+			issueTrackerUrl: "https://github.com/user/project/issues",
+			wantErr:         true,
+			errMsg:          "could not extract project name",
+		},
+		{
+			name:            "empty name after options should error",
+			projectUrl:      "https://github.com/user/project",
+			issueTrackerUrl: "https://github.com/user/project/issues",
+			opts: []helpers.OptionsFunc[contributingProps]{
+				WithName(""),
+			},
+			wantErr: true,
+			errMsg:  "name cannot be empty",
+		},
+		{
+			name:            "valid inputs should pass",
+			projectUrl:      "https://github.com/user/project",
+			issueTrackerUrl: "https://github.com/user/project/issues",
+			wantErr:         false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := New(tt.projectUrl, tt.issueTrackerUrl, tt.opts...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("New() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if tt.wantErr && err != nil && !strings.Contains(err.Error(), tt.errMsg) {
+				t.Errorf("New() error = %v, should contain %q", err, tt.errMsg)
+			}
+		})
+	}
+}
+
 func TestContributingContent(t *testing.T) {
 	tests := []struct {
 		name            string

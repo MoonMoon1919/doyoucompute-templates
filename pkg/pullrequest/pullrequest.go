@@ -19,6 +19,8 @@
 package pullrequest
 
 import (
+	"fmt"
+
 	"github.com/MoonMoon1919/doyoucompute"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
@@ -140,6 +142,11 @@ func New(opts ...helpers.OptionsFunc[pullRequestProps]) (doyoucompute.Document, 
 	err := helpers.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
+	}
+
+	// Validate
+	if props.name == "" {
+		return doyoucompute.Document{}, fmt.Errorf("pull request name cannot be empty")
 	}
 
 	return helpers.DocumentBuilder(props.name, func(d *doyoucompute.Document) error {

@@ -378,3 +378,95 @@ func TestDefaultFunctions(t *testing.T) {
 		})
 	}
 }
+
+func TestReadmeValidation(t *testing.T) {
+	validIntro := doyoucompute.NewParagraph()
+	validIntro.Text("Test intro")
+
+	validFeatures := doyoucompute.NewSection("Features")
+	validFeatures.WriteParagraph().Text("Feature 1")
+
+	validQuickStart := doyoucompute.NewSection("Quick Start")
+	validQuickStart.WriteParagraph().Text("Install")
+
+	emptySection := doyoucompute.NewSection("")
+
+	tests := []struct {
+		name               string
+		props              ReadmeProps
+		additionalSections []doyoucompute.Section
+		opts               []helpers.OptionsFunc[ReadmeProps]
+		wantErr            bool
+		errMsg             string
+	}{
+		{
+			name: "empty name should error",
+			props: ReadmeProps{
+				Name:       "",
+				Intro:      *validIntro,
+				Features:   validFeatures,
+				QuickStart: validQuickStart,
+			},
+			wantErr: true,
+			errMsg:  "name cannot be empty",
+		},
+		{
+			name: "empty features should error",
+			props: ReadmeProps{
+				Name:       "Test",
+				Intro:      *validIntro,
+				Features:   emptySection,
+				QuickStart: validQuickStart,
+			},
+			wantErr: true,
+			errMsg:  "features section is required",
+		},
+		{
+			name: "empty quick start should error",
+			props: ReadmeProps{
+				Name:       "Test",
+				Intro:      *validIntro,
+				Features:   validFeatures,
+				QuickStart: emptySection,
+			},
+			wantErr: true,
+			errMsg:  "quick start section is required",
+		},
+		{
+			name: "name set to empty via options should error",
+			props: ReadmeProps{
+				Name:       "Test",
+				Intro:      *validIntro,
+				Features:   validFeatures,
+				QuickStart: validQuickStart,
+			},
+			opts: []helpers.OptionsFunc[ReadmeProps]{
+				WithName(""),
+			},
+			wantErr: true,
+			errMsg:  "name cannot be empty",
+		},
+		{
+			name: "valid props should pass",
+			props: ReadmeProps{
+				Name:       "Test",
+				Intro:      *validIntro,
+				Features:   validFeatures,
+				QuickStart: validQuickStart,
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := New(tt.props, tt.additionalSections, tt.opts...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("New() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if tt.wantErr && err != nil && !strings.Contains(err.Error(), tt.errMsg) {
+				t.Errorf("New() error = %v, should contain %q", err, tt.errMsg)
+			}
+		})
+	}
+}

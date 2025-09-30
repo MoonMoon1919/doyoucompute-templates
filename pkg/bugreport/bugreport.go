@@ -20,6 +20,8 @@
 package bugreport
 
 import (
+	"fmt"
+
 	"github.com/MoonMoon1919/doyoucompute"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
@@ -273,6 +275,10 @@ func New(opts ...helpers.OptionsFunc[bugReportProps]) (doyoucompute.Document, er
 	err := helpers.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
+	}
+
+	if props.name == "" {
+		return doyoucompute.Document{}, fmt.Errorf("bug report name cannot be empty")
 	}
 
 	return helpers.DocumentBuilder(props.name, func(d *doyoucompute.Document) error {

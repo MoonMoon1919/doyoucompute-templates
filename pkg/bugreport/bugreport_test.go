@@ -263,6 +263,41 @@ func TestBugReportContent(t *testing.T) {
 	}
 }
 
+func TestBugReportValidation(t *testing.T) {
+	tests := []struct {
+		name    string
+		opts    []helpers.OptionsFunc[bugReportProps]
+		wantErr bool
+		errMsg  string
+	}{
+		{
+			name: "empty name should error",
+			opts: []helpers.OptionsFunc[bugReportProps]{
+				WithName(""),
+			},
+			wantErr: true,
+			errMsg:  "name cannot be empty",
+		},
+		{
+			name:    "default name should pass",
+			opts:    nil,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := New(tt.opts...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("New() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if tt.wantErr && err != nil && !strings.Contains(err.Error(), tt.errMsg) {
+				t.Errorf("New() error = %v, should contain %q", err, tt.errMsg)
+			}
+		})
+	}
+}
+
 func TestDefaultFunctions(t *testing.T) {
 	tests := []struct {
 		name     string
