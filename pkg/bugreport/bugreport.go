@@ -200,8 +200,8 @@ func DefaultActualBehavior() doyoucompute.Section {
 	})
 }
 
-// DefaultEnvirionmentDetails returns the default environment details section.
-func DefaultEnvirionmentDetails() doyoucompute.Section {
+// DefaultEnvironmentDetails returns the default environment details section.
+func DefaultEnvironmentDetails() doyoucompute.Section {
 	return helpers.SectionFactory("Environment details", func(s doyoucompute.Section) doyoucompute.Section {
 		s.WriteComment("Tell us what go version, os, package version, etc.")
 
@@ -266,7 +266,7 @@ func New(opts ...helpers.OptionsFunc[bugReportProps]) (doyoucompute.Document, er
 		frontmatter:        DefaultFrontMatter(),
 		expectedBehavior:   DefaultExpectedBehavior(),
 		actualBehavior:     DefaultActualBehavior(),
-		environmentDetails: DefaultEnvirionmentDetails(),
+		environmentDetails: DefaultEnvironmentDetails(),
 		reproductionSteps:  DefaultStepsToReproduce(),
 		codeSamples:        DefaultCodeSamples(),
 		errors:             DefaultErrorMessages(),

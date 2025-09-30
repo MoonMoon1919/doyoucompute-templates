@@ -326,9 +326,9 @@ func TestDefaultFunctions(t *testing.T) {
 			wantNil: false,
 		},
 		{
-			name: "DefaultEnvirionmentDetails",
+			name: "DefaultEnvironmentDetails",
 			testFunc: func() interface{} {
-				return DefaultEnvirionmentDetails()
+				return DefaultEnvironmentDetails()
 			},
 			wantNil: false,
 		},
