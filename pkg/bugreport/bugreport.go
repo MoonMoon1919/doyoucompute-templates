@@ -23,7 +23,6 @@ import (
 	"fmt"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 const DEFAULT_NAME = "Bug Report"
@@ -39,8 +38,6 @@ type bugReportProps struct {
 	errors             doyoucompute.Section
 }
 
-// TODO: Add GH frontmatter type to main pkg
-
 // Overrides the default frontmatter for the document
 // Example:
 //
@@ -51,8 +48,8 @@ type bugReportProps struct {
 //		"labels":    "",
 //		"assignees": "",
 //	}))
-func WithFrontMatter(frontmatter doyoucompute.Frontmatter) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithFrontMatter(frontmatter doyoucompute.Frontmatter) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.frontmatter = frontmatter
 
 		return nil, nil
@@ -67,8 +64,8 @@ func WithFrontMatter(frontmatter doyoucompute.Frontmatter) helpers.OptionsFunc[b
 //	section := doyoucompute.NewSection("Expected behavior")
 //	// Add section content...
 //	bugreport.WithExpectedBehavior(section)
-func WithExpectedBehavior(behavior doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithExpectedBehavior(behavior doyoucompute.Section) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.expectedBehavior = behavior
 
 		return nil, nil
@@ -83,8 +80,8 @@ func WithExpectedBehavior(behavior doyoucompute.Section) helpers.OptionsFunc[bug
 //	section := doyoucompute.NewSection("Actual behavior")
 //	// Add section content...
 //	bugreport.WithActualBehavior(section)
-func WithActualBehavior(behavior doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithActualBehavior(behavior doyoucompute.Section) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.actualBehavior = behavior
 
 		return nil, nil
@@ -99,8 +96,8 @@ func WithActualBehavior(behavior doyoucompute.Section) helpers.OptionsFunc[bugRe
 //	section := doyoucompute.NewSection("Environment")
 //	// Add section content...
 //	bugreport.WithEnvironmentDetails(section)
-func WithEnvironmentDetails(env doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithEnvironmentDetails(env doyoucompute.Section) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.environmentDetails = env
 
 		return nil, nil
@@ -117,8 +114,8 @@ func WithEnvironmentDetails(env doyoucompute.Section) helpers.OptionsFunc[bugRep
 //	list.Append("Run the program")
 //	list.Append("Observe the error")
 //	bugreport.WithReproductionSteps(section)
-func WithReproductionSteps(reproSteps doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithReproductionSteps(reproSteps doyoucompute.Section) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.reproductionSteps = reproSteps
 
 		return nil, nil
@@ -133,8 +130,8 @@ func WithReproductionSteps(reproSteps doyoucompute.Section) helpers.OptionsFunc[
 //	section := doyoucompute.NewSection("Code samples")
 //	section.WriteCodeBlock("go", []string{"fmt.Println(\"bug\")"}, doyoucompute.Static)
 //	bugreport.WithCodeSamples(section)
-func WithCodeSamples(samples doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithCodeSamples(samples doyoucompute.Section) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.codeSamples = samples
 
 		return nil, nil
@@ -149,8 +146,8 @@ func WithCodeSamples(samples doyoucompute.Section) helpers.OptionsFunc[bugReport
 //	section := doyoucompute.NewSection("Errors")
 //	// Add section content...
 //	bugreport.WithErrorDetails(section)
-func WithErrorDetails(errDetails doyoucompute.Section) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithErrorDetails(errDetails doyoucompute.Section) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.errors = errDetails
 
 		return nil, nil
@@ -162,8 +159,8 @@ func WithErrorDetails(errDetails doyoucompute.Section) helpers.OptionsFunc[bugRe
 // Example:
 //
 //	bugreport.WithName("foo")
-func WithName(name string) helpers.OptionsFunc[bugReportProps] {
-	return func(p *bugReportProps) (helpers.PostEffect[bugReportProps], error) {
+func WithName(name string) doyoucompute.OptionBuilder[bugReportProps] {
+	return func(p *bugReportProps) (doyoucompute.Finalizer[bugReportProps], error) {
 		p.name = name
 
 		return func(p *bugReportProps) error {
@@ -184,60 +181,72 @@ func WithName(name string) helpers.OptionsFunc[bugReportProps] {
 
 // DefaultExpectedBehavior returns the default expected behavior section.
 func DefaultExpectedBehavior() doyoucompute.Section {
-	return helpers.SectionFactory("Expected behavior", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Expected behavior", func(s *doyoucompute.Section) error {
 		s.WriteComment("What should happen?")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultActualBehavior returns the default actual behavior section.
 func DefaultActualBehavior() doyoucompute.Section {
-	return helpers.SectionFactory("Actual behavior", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Actual behavior", func(s *doyoucompute.Section) error {
 		s.WriteComment("What actually happens?")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultEnvironmentDetails returns the default environment details section.
 func DefaultEnvironmentDetails() doyoucompute.Section {
-	return helpers.SectionFactory("Environment details", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Environment details", func(s *doyoucompute.Section) error {
 		s.WriteComment("Tell us what go version, os, package version, etc.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultCodeSamples returns the default code samples section.
 func DefaultCodeSamples() doyoucompute.Section {
-	return helpers.SectionFactory("Code Samples", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Code Samples", func(s *doyoucompute.Section) error {
 		s.WriteComment("Share a snippet of code that demonstrates the bug.")
 		s.WriteCodeBlock("sh", []string{"# place code in here"}, doyoucompute.Static)
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultErrorMessages returns the default error messages section.
 func DefaultErrorMessages() doyoucompute.Section {
-	return helpers.SectionFactory("Error Messages", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Error Messages", func(s *doyoucompute.Section) error {
 		s.WriteComment("Add any relevant error messages/logs here.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultStepsToReproduce returns the default steps to reproduce section.
 func DefaultStepsToReproduce() doyoucompute.Section {
-	return helpers.SectionFactory("Steps to reproduce", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Steps to reproduce", func(s *doyoucompute.Section) error {
 		reproList := s.CreateList(doyoucompute.NUMBERED)
 		reproList.Append("") // Intentionally empty
 		reproList.Append("")
 		reproList.Append("")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultFrontMatter returns the default frontmatter for bug reports.
@@ -260,7 +269,7 @@ func DefaultFrontMatter() doyoucompute.Frontmatter {
 //		bugreport.WithName("API Bug"),
 //		bugreport.WithExpectedBehavior(customSection),
 //	)
-func New(opts ...helpers.OptionsFunc[bugReportProps]) (doyoucompute.Document, error) {
+func New(opts ...doyoucompute.OptionBuilder[bugReportProps]) (doyoucompute.Document, error) {
 	props := bugReportProps{
 		name:               DEFAULT_NAME,
 		frontmatter:        DefaultFrontMatter(),
@@ -272,7 +281,7 @@ func New(opts ...helpers.OptionsFunc[bugReportProps]) (doyoucompute.Document, er
 		errors:             DefaultErrorMessages(),
 	}
 
-	err := helpers.ApplyOptions(&props, opts...)
+	err := doyoucompute.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}
@@ -281,7 +290,7 @@ func New(opts ...helpers.OptionsFunc[bugReportProps]) (doyoucompute.Document, er
 		return doyoucompute.Document{}, fmt.Errorf("bug report name cannot be empty")
 	}
 
-	return helpers.DocumentBuilder(props.name, func(d *doyoucompute.Document) error {
+	return doyoucompute.DocumentFactory(props.name, func(d *doyoucompute.Document) error {
 		d.AddFrontmatter(props.frontmatter)
 		d.AddSection(props.expectedBehavior)
 		d.AddSection(props.actualBehavior)

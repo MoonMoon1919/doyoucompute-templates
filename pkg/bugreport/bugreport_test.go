@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 func TestBugReport(t *testing.T) {
@@ -23,7 +22,7 @@ func TestBugReport(t *testing.T) {
 
 	tests := []struct {
 		name               string
-		opts               []helpers.OptionsFunc[bugReportProps]
+		opts               []doyoucompute.OptionBuilder[bugReportProps]
 		wantErr            bool
 		wantName           string
 		wantContentCount   int
@@ -43,7 +42,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom name",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithName("Critical Bug Report"),
 			},
 			wantErr:            false,
@@ -55,7 +54,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom frontmatter",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithFrontMatter(*customFrontmatter),
 			},
 			wantErr:            false,
@@ -67,7 +66,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom expected behavior",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithExpectedBehavior(customSection),
 			},
 			wantErr:          false,
@@ -76,7 +75,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom actual behavior",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithActualBehavior(customSection),
 			},
 			wantErr:          false,
@@ -85,7 +84,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom environment details",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithEnvironmentDetails(customSection),
 			},
 			wantErr:          false,
@@ -94,7 +93,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom reproduction steps",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithReproductionSteps(customSection),
 			},
 			wantErr:          false,
@@ -103,7 +102,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom code samples",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithCodeSamples(customSection),
 			},
 			wantErr:          false,
@@ -112,7 +111,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with custom error details",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithErrorDetails(customSection),
 			},
 			wantErr:          false,
@@ -121,7 +120,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with multiple options",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithName("Production Bug"),
 				WithExpectedBehavior(customSection),
 				WithActualBehavior(customSection),
@@ -132,7 +131,7 @@ func TestBugReport(t *testing.T) {
 		},
 		{
 			name: "with all options",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithName("Complete Bug Report"),
 				WithFrontMatter(*customFrontmatter),
 				WithExpectedBehavior(customSection),
@@ -199,7 +198,7 @@ func TestBugReport(t *testing.T) {
 func TestBugReportContent(t *testing.T) {
 	tests := []struct {
 		name            string
-		opts            []helpers.OptionsFunc[bugReportProps]
+		opts            []doyoucompute.OptionBuilder[bugReportProps]
 		wantContains    []string
 		wantNotContains []string
 	}{
@@ -217,7 +216,7 @@ func TestBugReportContent(t *testing.T) {
 		},
 		{
 			name: "custom section replaces default",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithExpectedBehavior(func() doyoucompute.Section {
 					s := doyoucompute.NewSection("My Custom Expected")
 					s.WriteParagraph().Text("Custom expected behavior")
@@ -266,13 +265,13 @@ func TestBugReportContent(t *testing.T) {
 func TestBugReportValidation(t *testing.T) {
 	tests := []struct {
 		name    string
-		opts    []helpers.OptionsFunc[bugReportProps]
+		opts    []doyoucompute.OptionBuilder[bugReportProps]
 		wantErr bool
 		errMsg  string
 	}{
 		{
 			name: "empty name should error",
-			opts: []helpers.OptionsFunc[bugReportProps]{
+			opts: []doyoucompute.OptionBuilder[bugReportProps]{
 				WithName(""),
 			},
 			wantErr: true,

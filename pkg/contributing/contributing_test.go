@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 func TestContributing(t *testing.T) {
@@ -16,7 +15,7 @@ func TestContributing(t *testing.T) {
 		name            string
 		projectUrl      string
 		issueTrackerUrl string
-		opts            []helpers.OptionsFunc[contributingProps]
+		opts            []doyoucompute.OptionBuilder[contributingProps]
 		wantErr         bool
 		wantName        string
 		wantMinContent  int
@@ -34,7 +33,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom name",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithName("Contributing Guidelines"),
 			},
 			wantErr:        false,
@@ -45,7 +44,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom project url",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithProjectUrl("https://github.com/other/repo"),
 			},
 			wantErr:        false,
@@ -56,7 +55,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom issue tracker url",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithIssueTrackerUrl("https://github.com/other/repo/issues"),
 			},
 			wantErr:        false,
@@ -67,7 +66,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom getting started",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithGettingStarted(customSection),
 			},
 			wantErr:        false,
@@ -78,7 +77,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom chose a task",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithChoseATask(customSection),
 			},
 			wantErr:        false,
@@ -89,7 +88,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom setup",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithSetup(customSection),
 			},
 			wantErr:        false,
@@ -100,7 +99,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom development",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithDevelopment(customSection),
 			},
 			wantErr:        false,
@@ -111,7 +110,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom submissions",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithSubmissions(customSection),
 			},
 			wantErr:        false,
@@ -122,7 +121,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom writing docs",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithWritingDocs(customSection),
 			},
 			wantErr:        false,
@@ -133,7 +132,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom reporting bugs",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithReportingbugs(customSection),
 			},
 			wantErr:        false,
@@ -144,7 +143,7 @@ func TestContributing(t *testing.T) {
 			name:            "with custom license",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithLicense(customSection),
 			},
 			wantErr:        false,
@@ -155,7 +154,7 @@ func TestContributing(t *testing.T) {
 			name:            "with multiple options",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithName("How to Contribute"),
 				WithSetup(customSection),
 				WithDevelopment(customSection),
@@ -168,7 +167,7 @@ func TestContributing(t *testing.T) {
 			name:            "with all options",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithName("Complete Contributing Guide"),
 				WithProjectUrl("https://github.com/custom/project"),
 				WithIssueTrackerUrl("https://github.com/custom/project/issues"),
@@ -227,7 +226,7 @@ func TestContributingValidation(t *testing.T) {
 		name            string
 		projectUrl      string
 		issueTrackerUrl string
-		opts            []helpers.OptionsFunc[contributingProps]
+		opts            []doyoucompute.OptionBuilder[contributingProps]
 		wantErr         bool
 		errMsg          string
 	}{
@@ -256,7 +255,7 @@ func TestContributingValidation(t *testing.T) {
 			name:            "empty name after options should error",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithName(""),
 			},
 			wantErr: true,
@@ -288,7 +287,7 @@ func TestContributingContent(t *testing.T) {
 		name            string
 		projectUrl      string
 		issueTrackerUrl string
-		opts            []helpers.OptionsFunc[contributingProps]
+		opts            []doyoucompute.OptionBuilder[contributingProps]
 		wantContains    []string
 		wantNotContains []string
 	}{
@@ -313,7 +312,7 @@ func TestContributingContent(t *testing.T) {
 			name:            "custom section replaces default",
 			projectUrl:      "https://github.com/user/project",
 			issueTrackerUrl: "https://github.com/user/project/issues",
-			opts: []helpers.OptionsFunc[contributingProps]{
+			opts: []doyoucompute.OptionBuilder[contributingProps]{
 				WithSetup(func() doyoucompute.Section {
 					s := doyoucompute.NewSection("Custom Setup")
 					s.WriteParagraph().Text("Use Docker Compose")

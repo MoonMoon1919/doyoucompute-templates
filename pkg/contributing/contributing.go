@@ -29,7 +29,6 @@ import (
 	"strings"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 type contributingProps struct {
@@ -56,8 +55,8 @@ func DefaultName() string {
 // Example:
 //
 //	contributing.WithName("Contributing Guidelines")
-func WithName(name string) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithName(name string) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.name = name
 
 		return nil, nil
@@ -69,8 +68,8 @@ func WithName(name string) helpers.OptionsFunc[contributingProps] {
 // Example:
 //
 //	contributing.WithProjectUrl("https://github.com/username/project")
-func WithProjectUrl(url string) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithProjectUrl(url string) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.projectUrl = url
 
 		return nil, nil
@@ -82,8 +81,8 @@ func WithProjectUrl(url string) helpers.OptionsFunc[contributingProps] {
 // Example:
 //
 //	contributing.WithIssueTrackerUrl("https://github.com/username/project/issues")
-func WithIssueTrackerUrl(url string) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithIssueTrackerUrl(url string) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.issueTrackerUrl = url
 
 		return func(p *contributingProps) error {
@@ -103,8 +102,8 @@ func WithIssueTrackerUrl(url string) helpers.OptionsFunc[contributingProps] {
 //	section := doyoucompute.NewSection("Getting started")
 //	section.WriteParagraph().Text("Read our documentation first")
 //	contributing.WithGettingStarted(section)
-func WithGettingStarted(gettingStarted doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithGettingStarted(gettingStarted doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.gettingStarted = gettingStarted
 
 		return nil, nil
@@ -119,8 +118,8 @@ func WithGettingStarted(gettingStarted doyoucompute.Section) helpers.OptionsFunc
 //	section := doyoucompute.NewSection("Find a task")
 //	section.WriteParagraph().Text("Check our project board")
 //	contributing.WithChoseATask(section)
-func WithChoseATask(task doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithChoseATask(task doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.choseATask = task
 
 		return nil, nil
@@ -135,8 +134,8 @@ func WithChoseATask(task doyoucompute.Section) helpers.OptionsFunc[contributingP
 //	section := doyoucompute.NewSection("Setup")
 //	section.WriteParagraph().Text("Install Docker first")
 //	contributing.WithSetup(section)
-func WithSetup(setup doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithSetup(setup doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.setup = setup
 
 		return nil, nil
@@ -151,8 +150,8 @@ func WithSetup(setup doyoucompute.Section) helpers.OptionsFunc[contributingProps
 //	section := doyoucompute.NewSection("Development")
 //	section.WriteParagraph().Text("Use our pre-commit hooks")
 //	contributing.WithDevelopment(section)
-func WithDevelopment(development doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithDevelopment(development doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.development = development
 
 		return nil, nil
@@ -167,8 +166,8 @@ func WithDevelopment(development doyoucompute.Section) helpers.OptionsFunc[contr
 //	section := doyoucompute.NewSection("Submitting PRs")
 //	section.WriteParagraph().Text("Ensure CI passes before requesting review")
 //	contributing.WithSubmissions(section)
-func WithSubmissions(submissions doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithSubmissions(submissions doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.submissions = submissions
 
 		return nil, nil
@@ -183,8 +182,8 @@ func WithSubmissions(submissions doyoucompute.Section) helpers.OptionsFunc[contr
 //	section := doyoucompute.NewSection("Documentation")
 //	section.WriteParagraph().Text("We use MkDocs for documentation")
 //	contributing.WithWritingDocs(section)
-func WithWritingDocs(docs doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithWritingDocs(docs doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.writingDocs = docs
 
 		return nil, nil
@@ -199,8 +198,8 @@ func WithWritingDocs(docs doyoucompute.Section) helpers.OptionsFunc[contributing
 //	section := doyoucompute.NewSection("Bug Reports")
 //	section.WriteParagraph().Text("Include system information")
 //	contributing.WithReportingbugs(section)
-func WithReportingbugs(bugs doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithReportingbugs(bugs doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.reportingbugs = bugs
 
 		return nil, nil
@@ -215,8 +214,8 @@ func WithReportingbugs(bugs doyoucompute.Section) helpers.OptionsFunc[contributi
 //	section := doyoucompute.NewSection("License")
 //	section.WriteParagraph().Text("MIT License applies")
 //	contributing.WithLicense(section)
-func WithLicense(license doyoucompute.Section) helpers.OptionsFunc[contributingProps] {
-	return func(p *contributingProps) (helpers.PostEffect[contributingProps], error) {
+func WithLicense(license doyoucompute.Section) doyoucompute.OptionBuilder[contributingProps] {
+	return func(p *contributingProps) (doyoucompute.Finalizer[contributingProps], error) {
 		p.license = license
 
 		return nil, nil
@@ -225,19 +224,21 @@ func WithLicense(license doyoucompute.Section) helpers.OptionsFunc[contributingP
 
 // DefaultGettingStarted returns the default getting started section.
 func DefaultGettingStarted() doyoucompute.Section {
-	return helpers.SectionFactory("Getting started", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Getting started", func(s *doyoucompute.Section) error {
 		s.WriteParagraph().
 			Text("Read the").
 			Link("README", "README.md").
 			Text("to understand the project's scope and purpose.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultChoseATask returns the default task selection section.
 func DefaultChoseATask(issueTrackerUrl string) doyoucompute.Section {
-	return helpers.SectionFactory("Find a task", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Find a task", func(s *doyoucompute.Section) error {
 		s.WriteParagraph().
 			Text("Browse the").
 			Link("issue tracker", issueTrackerUrl).
@@ -252,24 +253,28 @@ func DefaultChoseATask(issueTrackerUrl string) doyoucompute.Section {
 		suggestionsList.Append("Propose improvements")
 		suggestionsList.Append("Ask questions about implementation details")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultLicense returns the default license section.
 func DefaultLicense() doyoucompute.Section {
-	return helpers.SectionFactory("License", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("License", func(s *doyoucompute.Section) error {
 		s.WriteParagraph().
 			Text("By contributing, you agree that your contributions will be licensed under the project's").
 			Link("License.", "./LICENSE")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultWritingDocs returns the default documentation writing section.
 func DefaultWritingDocs() doyoucompute.Section {
-	return helpers.SectionFactory("Writing documentation", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Writing documentation", func(s *doyoucompute.Section) error {
 		s.WriteParagraph().
 			Text("Read the").
 			Link("README", "./README.md").
@@ -279,13 +284,15 @@ func DefaultWritingDocs() doyoucompute.Section {
 		s.WriteParagraph().
 			Text("Look for documentation that is unclear, incomplete, or outdated and update it.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultReportingBugs returns the default bug reporting section.
 func DefaultReportingBugs(issueTrackerUrl string) doyoucompute.Section {
-	return helpers.SectionFactory("Reporting bugs", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Reporting bugs", func(s *doyoucompute.Section) error {
 		checkingSection := s.CreateSection("Checking for Existing Reports")
 		checkingSection.WriteParagraph().
 			Text("Before reporting a new bug, search the").
@@ -298,13 +305,15 @@ func DefaultReportingBugs(issueTrackerUrl string) doyoucompute.Section {
 		creatingSection.WriteParagraph().
 			Text("If you can't find an existing report, create a new issue and fill out the bug report form.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultOpenSourceGoSetupGuidelines returns the default setup section for Go projects.
 func DefaultOpenSourceGoSetupGuidelines(projectUrl string, projectName string) doyoucompute.Section {
-	return helpers.SectionFactory("Setting Up Your Development Environment", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Setting Up Your Development Environment", func(s *doyoucompute.Section) error {
 		s.WriteParagraph().
 			Text("First, fork the repository on GitHub at").
 			Link(projectUrl, projectUrl).
@@ -322,13 +331,15 @@ func DefaultOpenSourceGoSetupGuidelines(projectUrl string, projectName string) d
 		s.WriteCodeBlock("bash", []string{"go mod tidy"}, doyoucompute.Static)
 		s.WriteCodeBlock("bash", []string{"go test ./..."}, doyoucompute.Static)
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultOpenSourceGoDevelopmentGuidelines returns the default development workflow section for Go projects.
 func DefaultOpenSourceGoDevelopmentGuidelines() doyoucompute.Section {
-	return helpers.SectionFactory("Development Workflow", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Development Workflow", func(s *doyoucompute.Section) error {
 		s.WriteParagraph().
 			Text("Create a new branch for your feature or bug fix:")
 
@@ -342,13 +353,15 @@ func DefaultOpenSourceGoDevelopmentGuidelines() doyoucompute.Section {
 		s.WriteParagraph().
 			Text("If you're adding new features, consider adding example usage in the examples directory.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultOpenSourceSubmittingGuidelines returns the default submission guidelines section.
 func DefaultOpenSourceSubmittingGuidelines() doyoucompute.Section {
-	return helpers.SectionFactory("Submitting your changes", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Submitting your changes", func(s *doyoucompute.Section) error {
 		s.WriteParagraph().
 			Text("Once you're satisfied with your changes, commit them with a descriptive message:")
 
@@ -370,8 +383,10 @@ func DefaultOpenSourceSubmittingGuidelines() doyoucompute.Section {
 		submissionSteps.Append("Reference any relevant issues using #issue-number")
 		submissionSteps.Append("Wait for review and address any feedback")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // New creates a new contributing guidelines document with default sections for Go projects.
@@ -387,7 +402,7 @@ func DefaultOpenSourceSubmittingGuidelines() doyoucompute.Section {
 //		"https://github.com/username/project/issues",
 //		contributing.WithName("How to Contribute"),
 //	)
-func New(projectUrl, issueTrackerUrl string, opts ...helpers.OptionsFunc[contributingProps]) (doyoucompute.Document, error) {
+func New(projectUrl, issueTrackerUrl string, opts ...doyoucompute.OptionBuilder[contributingProps]) (doyoucompute.Document, error) {
 	if projectUrl == "" {
 		return doyoucompute.Document{}, fmt.Errorf("projectUrl cannot be empty")
 	}
@@ -417,7 +432,7 @@ func New(projectUrl, issueTrackerUrl string, opts ...helpers.OptionsFunc[contrib
 		license:         DefaultLicense(),
 	}
 
-	err := helpers.ApplyOptions(&props, opts...)
+	err := doyoucompute.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}
@@ -427,7 +442,7 @@ func New(projectUrl, issueTrackerUrl string, opts ...helpers.OptionsFunc[contrib
 		return doyoucompute.Document{}, fmt.Errorf("contributing guide name cannot be empty")
 	}
 
-	return helpers.DocumentBuilder(props.name, func(d *doyoucompute.Document) error {
+	return doyoucompute.DocumentFactory(props.name, func(d *doyoucompute.Document) error {
 		// Apply hierarchy here to improve flexibility of doc content using options
 		props.gettingStarted.AddSection(props.choseATask)
 		d.AddSection(props.gettingStarted)

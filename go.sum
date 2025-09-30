@@ -2,6 +2,8 @@ github.com/MoonMoon1919/doyoucompute v0.1.0-alpha h1:mrnfMqiJDepKbbsX78h2PQNC/Lm
 github.com/MoonMoon1919/doyoucompute v0.1.0-alpha/go.mod h1:uJO/dGltVJhzzTHi6QvXF5nIUqED2uYBGi26n2kzmpk=
 github.com/MoonMoon1919/doyoucompute v0.1.1 h1:I8MNF+mr9TWBVBeQlYZywK195ZgT6b8IAI9WM9QMiPI=
 github.com/MoonMoon1919/doyoucompute v0.1.1/go.mod h1:uJO/dGltVJhzzTHi6QvXF5nIUqED2uYBGi26n2kzmpk=
+github.com/MoonMoon1919/doyoucompute v0.1.2 h1:aAPGKC84N7EFiANO+zkteX9ZVsOVeseO2NwtV90fZvE=
+github.com/MoonMoon1919/doyoucompute v0.1.2/go.mod h1:uJO/dGltVJhzzTHi6QvXF5nIUqED2uYBGi26n2kzmpk=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

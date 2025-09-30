@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 func TestReadme(t *testing.T) {
@@ -25,7 +24,7 @@ func TestReadme(t *testing.T) {
 		name               string
 		props              ReadmeProps
 		additionalSections []doyoucompute.Section
-		opts               []helpers.OptionsFunc[ReadmeProps]
+		opts               []doyoucompute.OptionBuilder[ReadmeProps]
 		wantErr            bool
 		wantName           string
 		wantMinContent     int
@@ -53,7 +52,7 @@ func TestReadme(t *testing.T) {
 				QuickStart: quickStartSection,
 			},
 			additionalSections: nil,
-			opts: []helpers.OptionsFunc[ReadmeProps]{
+			opts: []doyoucompute.OptionBuilder[ReadmeProps]{
 				WithName("My Awesome Project"),
 			},
 			wantErr:        false,
@@ -101,7 +100,7 @@ func TestReadme(t *testing.T) {
 				QuickStart: quickStartSection,
 			},
 			additionalSections: []doyoucompute.Section{additionalSection},
-			opts: []helpers.OptionsFunc[ReadmeProps]{
+			opts: []doyoucompute.OptionBuilder[ReadmeProps]{
 				WithName("Complete Documentation"),
 			},
 			wantErr:        false,
@@ -159,7 +158,7 @@ func TestReadmeContent(t *testing.T) {
 		name               string
 		props              ReadmeProps
 		additionalSections []doyoucompute.Section
-		opts               []helpers.OptionsFunc[ReadmeProps]
+		opts               []doyoucompute.OptionBuilder[ReadmeProps]
 		wantContains       []string
 		wantNotContains    []string
 	}{
@@ -395,7 +394,7 @@ func TestReadmeValidation(t *testing.T) {
 		name               string
 		props              ReadmeProps
 		additionalSections []doyoucompute.Section
-		opts               []helpers.OptionsFunc[ReadmeProps]
+		opts               []doyoucompute.OptionBuilder[ReadmeProps]
 		wantErr            bool
 		errMsg             string
 	}{
@@ -440,7 +439,7 @@ func TestReadmeValidation(t *testing.T) {
 				Features:   validFeatures,
 				QuickStart: validQuickStart,
 			},
-			opts: []helpers.OptionsFunc[ReadmeProps]{
+			opts: []doyoucompute.OptionBuilder[ReadmeProps]{
 				WithName(""),
 			},
 			wantErr: true,

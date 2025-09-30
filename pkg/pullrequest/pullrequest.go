@@ -22,7 +22,6 @@ import (
 	"fmt"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 type pullRequestProps struct {
@@ -37,8 +36,8 @@ type pullRequestProps struct {
 // Example:
 //
 //	pullrequest.WithName("Feature: Add authentication")
-func WithName(name string) helpers.OptionsFunc[pullRequestProps] {
-	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
+func WithName(name string) doyoucompute.OptionBuilder[pullRequestProps] {
+	return func(p *pullRequestProps) (doyoucompute.Finalizer[pullRequestProps], error) {
 		p.name = name
 
 		return nil, nil
@@ -53,8 +52,8 @@ func WithName(name string) helpers.OptionsFunc[pullRequestProps] {
 //	section := doyoucompute.NewSection("Description")
 //	section.WriteParagraph().Text("Added OAuth2 authentication")
 //	pullrequest.WithDescription(section)
-func WithDescription(description doyoucompute.Section) helpers.OptionsFunc[pullRequestProps] {
-	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
+func WithDescription(description doyoucompute.Section) doyoucompute.OptionBuilder[pullRequestProps] {
+	return func(p *pullRequestProps) (doyoucompute.Finalizer[pullRequestProps], error) {
 		p.description = description
 
 		return nil, nil
@@ -69,8 +68,8 @@ func WithDescription(description doyoucompute.Section) helpers.OptionsFunc[pullR
 //	section := doyoucompute.NewSection("Related issue")
 //	section.WriteParagraph().Text("Fixes #123")
 //	pullrequest.WithRelatedIssue(section)
-func WithRelatedIssue(relatedIssue doyoucompute.Section) helpers.OptionsFunc[pullRequestProps] {
-	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
+func WithRelatedIssue(relatedIssue doyoucompute.Section) doyoucompute.OptionBuilder[pullRequestProps] {
+	return func(p *pullRequestProps) (doyoucompute.Finalizer[pullRequestProps], error) {
 		p.relatedIssue = relatedIssue
 
 		return nil, nil
@@ -85,8 +84,8 @@ func WithRelatedIssue(relatedIssue doyoucompute.Section) helpers.OptionsFunc[pul
 //	section := doyoucompute.NewSection("Testing")
 //	section.WriteParagraph().Text("Added unit tests and integration tests")
 //	pullrequest.WithTesting(section)
-func WithTesting(testing doyoucompute.Section) helpers.OptionsFunc[pullRequestProps] {
-	return func(p *pullRequestProps) (helpers.PostEffect[pullRequestProps], error) {
+func WithTesting(testing doyoucompute.Section) doyoucompute.OptionBuilder[pullRequestProps] {
+	return func(p *pullRequestProps) (doyoucompute.Finalizer[pullRequestProps], error) {
 		p.testing = testing
 
 		return nil, nil
@@ -100,26 +99,32 @@ func DefaultName() string {
 
 // DefaultDescription returns the default description section.
 func DefaultDescription() doyoucompute.Section {
-	return helpers.SectionFactory("Description", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Description", func(s *doyoucompute.Section) error {
 		s.WriteComment("What is this change and why are you making it?")
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultRelatedIssue returns the default related issue section.
 func DefaultRelatedIssue() doyoucompute.Section {
-	return helpers.SectionFactory("Related issue", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Related issue", func(s *doyoucompute.Section) error {
 		s.WriteComment("Link to the relevant issue here.")
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultTesting returns the default testing section.
 func DefaultTesting() doyoucompute.Section {
-	return helpers.SectionFactory("How I tested", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("How I tested", func(s *doyoucompute.Section) error {
 		s.WriteComment("How did you test these changes?")
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // New creates a new pull request document with default sections.
@@ -131,7 +136,7 @@ func DefaultTesting() doyoucompute.Section {
 //		pullrequest.WithName("Bug Fix PR"),
 //		pullrequest.WithTesting(customTestingSection),
 //	)
-func New(opts ...helpers.OptionsFunc[pullRequestProps]) (doyoucompute.Document, error) {
+func New(opts ...doyoucompute.OptionBuilder[pullRequestProps]) (doyoucompute.Document, error) {
 	props := pullRequestProps{
 		name:         DefaultName(),
 		description:  DefaultDescription(),
@@ -139,7 +144,7 @@ func New(opts ...helpers.OptionsFunc[pullRequestProps]) (doyoucompute.Document, 
 		testing:      DefaultTesting(),
 	}
 
-	err := helpers.ApplyOptions(&props, opts...)
+	err := doyoucompute.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}
@@ -149,7 +154,7 @@ func New(opts ...helpers.OptionsFunc[pullRequestProps]) (doyoucompute.Document, 
 		return doyoucompute.Document{}, fmt.Errorf("pull request name cannot be empty")
 	}
 
-	return helpers.DocumentBuilder(props.name, func(d *doyoucompute.Document) error {
+	return doyoucompute.DocumentFactory(props.name, func(d *doyoucompute.Document) error {
 		d.AddSection(props.description)
 		d.AddSection(props.relatedIssue)
 		d.AddSection(props.testing)

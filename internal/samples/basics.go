@@ -5,7 +5,6 @@ import (
 
 	"github.com/MoonMoon1919/doyoucompute"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/bugreport"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 func Basics() {
@@ -16,27 +15,32 @@ func Basics() {
 	}
 
 	// With options
+	expectedBehavior, err := doyoucompute.SectionFactory("Expected behavior",
+		func(s *doyoucompute.Section) error {
+			s.WriteComment("A comment explaining how to use the section")
+			return nil
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	codeSample, err := doyoucompute.SectionFactory("Code samples",
+		func(s *doyoucompute.Section) error {
+			s.WriteComment("A comment explaining how to use the section")
+			s.WriteCodeBlock("go", []string{"# place code in here"}, doyoucompute.Static)
+
+			return nil
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
 	bugreportOptions, err := bugreport.New(
 		bugreport.WithName("Bug report - name override"),
-		bugreport.WithExpectedBehavior(
-			helpers.SectionFactory("Expected behavior",
-				func(s doyoucompute.Section) doyoucompute.Section {
-					s.WriteComment("A comment explaining how to use the section")
-
-					return s
-				},
-			),
-		),
-		bugreport.WithCodeSamples(
-			helpers.SectionFactory("Code samples",
-				func(s doyoucompute.Section) doyoucompute.Section {
-					s.WriteComment("A comment explaining how to use the section")
-					s.WriteCodeBlock("go", []string{"# place code in here"}, doyoucompute.Static)
-
-					return s
-				},
-			),
-		),
+		bugreport.WithExpectedBehavior(expectedBehavior),
+		bugreport.WithCodeSamples(codeSample),
 	)
 	if err != nil {
 		panic(err)

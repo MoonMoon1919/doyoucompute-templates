@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 func TestPullRequest(t *testing.T) {
@@ -14,7 +13,7 @@ func TestPullRequest(t *testing.T) {
 
 	tests := []struct {
 		name             string
-		opts             []helpers.OptionsFunc[pullRequestProps]
+		opts             []doyoucompute.OptionBuilder[pullRequestProps]
 		wantErr          bool
 		wantName         string
 		wantContentCount int
@@ -28,7 +27,7 @@ func TestPullRequest(t *testing.T) {
 		},
 		{
 			name: "with custom name",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithName("Feature: Authentication"),
 			},
 			wantErr:          false,
@@ -37,7 +36,7 @@ func TestPullRequest(t *testing.T) {
 		},
 		{
 			name: "with custom description",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithDescription(customSection),
 			},
 			wantErr:          false,
@@ -46,7 +45,7 @@ func TestPullRequest(t *testing.T) {
 		},
 		{
 			name: "with custom related issue",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithRelatedIssue(customSection),
 			},
 			wantErr:          false,
@@ -55,7 +54,7 @@ func TestPullRequest(t *testing.T) {
 		},
 		{
 			name: "with custom testing",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithTesting(customSection),
 			},
 			wantErr:          false,
@@ -64,7 +63,7 @@ func TestPullRequest(t *testing.T) {
 		},
 		{
 			name: "with multiple options",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithName("Bug Fix: Memory Leak"),
 				WithDescription(customSection),
 				WithTesting(customSection),
@@ -75,7 +74,7 @@ func TestPullRequest(t *testing.T) {
 		},
 		{
 			name: "with all options",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithName("Complete PR"),
 				WithDescription(customSection),
 				WithRelatedIssue(customSection),
@@ -125,7 +124,7 @@ func TestPullRequest(t *testing.T) {
 func TestPullRequestContent(t *testing.T) {
 	tests := []struct {
 		name            string
-		opts            []helpers.OptionsFunc[pullRequestProps]
+		opts            []doyoucompute.OptionBuilder[pullRequestProps]
 		wantContains    []string
 		wantNotContains []string
 	}{
@@ -140,7 +139,7 @@ func TestPullRequestContent(t *testing.T) {
 		},
 		{
 			name: "custom description replaces default",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithDescription(func() doyoucompute.Section {
 					s := doyoucompute.NewSection("My Description")
 					s.WriteParagraph().Text("Added OAuth2 support")
@@ -157,7 +156,7 @@ func TestPullRequestContent(t *testing.T) {
 		},
 		{
 			name: "custom related issue replaces default",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithRelatedIssue(func() doyoucompute.Section {
 					s := doyoucompute.NewSection("Fixes")
 					s.WriteParagraph().Text("Closes #42")
@@ -174,7 +173,7 @@ func TestPullRequestContent(t *testing.T) {
 		},
 		{
 			name: "custom testing replaces default",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithTesting(func() doyoucompute.Section {
 					s := doyoucompute.NewSection("Testing Details")
 					s.WriteParagraph().Text("Ran unit tests and integration tests")
@@ -271,13 +270,13 @@ func TestDefaultFunctions(t *testing.T) {
 func TestPullRequestValidation(t *testing.T) {
 	tests := []struct {
 		name    string
-		opts    []helpers.OptionsFunc[pullRequestProps]
+		opts    []doyoucompute.OptionBuilder[pullRequestProps]
 		wantErr bool
 		errMsg  string
 	}{
 		{
 			name: "empty name should error",
-			opts: []helpers.OptionsFunc[pullRequestProps]{
+			opts: []doyoucompute.OptionBuilder[pullRequestProps]{
 				WithName(""),
 			},
 			wantErr: true,

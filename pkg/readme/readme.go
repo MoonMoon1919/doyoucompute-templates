@@ -30,7 +30,6 @@ import (
 	"fmt"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 )
 
 // ReadmeProps defines the required and optional properties for a README document.
@@ -54,8 +53,8 @@ type ReadmeProps struct {
 // Example:
 //
 //	readme.WithName("My Awesome Project")
-func WithName(name string) helpers.OptionsFunc[ReadmeProps] {
-	return func(p *ReadmeProps) (helpers.PostEffect[ReadmeProps], error) {
+func WithName(name string) doyoucompute.OptionBuilder[ReadmeProps] {
+	return func(p *ReadmeProps) (doyoucompute.Finalizer[ReadmeProps], error) {
 		p.Name = name
 
 		return nil, nil
@@ -64,26 +63,30 @@ func WithName(name string) helpers.OptionsFunc[ReadmeProps] {
 
 // DefaultContributing returns the default contributing section.
 func DefaultContributing() doyoucompute.Section {
-	return helpers.SectionFactory("Contributing", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("Contributing", func(s *doyoucompute.Section) error {
 		s.WriteIntro().
 			Text("See").
 			Link("CONTRIBUTING", "./CONTRIBUTING.md").
 			Text("for details.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // DefaultLicense returns the default license section.
 func DefaultLicense() doyoucompute.Section {
-	return helpers.SectionFactory("License", func(s doyoucompute.Section) doyoucompute.Section {
+	section, _ := doyoucompute.SectionFactory("License", func(s *doyoucompute.Section) error {
 		s.WriteIntro().
 			Text("See").
 			Link("LICENSE", "./LICENSE").
 			Text("for details.")
 
-		return s
+		return nil
 	})
+
+	return section
 }
 
 // New creates a new README document with the provided properties and optional additional sections.
@@ -103,7 +106,7 @@ func DefaultLicense() doyoucompute.Section {
 //		[]doyoucompute.Section{usageSection, apiSection},
 //		readme.WithName("Project Documentation"),
 //	)
-func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...helpers.OptionsFunc[ReadmeProps]) (doyoucompute.Document, error) {
+func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...doyoucompute.OptionBuilder[ReadmeProps]) (doyoucompute.Document, error) {
 	// Validate required fields
 	if props.Name == "" {
 		return doyoucompute.Document{}, fmt.Errorf("readme name cannot be empty")
@@ -124,7 +127,7 @@ func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...h
 		license:      DefaultLicense(),
 	}
 
-	err := helpers.ApplyOptions(&sProps, opts...)
+	err := doyoucompute.ApplyOptions(&sProps, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}
@@ -134,7 +137,7 @@ func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...h
 		return doyoucompute.Document{}, fmt.Errorf("readme name cannot be empty after applying options")
 	}
 
-	return helpers.DocumentBuilder(sProps.Name, func(d *doyoucompute.Document) error {
+	return doyoucompute.DocumentFactory(sProps.Name, func(d *doyoucompute.Document) error {
 		d.AddIntro(&sProps.Intro)
 		d.AddSection(sProps.Features)
 		d.AddSection(sProps.QuickStart)

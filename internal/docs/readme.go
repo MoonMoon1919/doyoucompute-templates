@@ -4,12 +4,11 @@ import (
 	"os"
 
 	"github.com/MoonMoon1919/doyoucompute"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/helpers"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/readme"
 )
 
-func features() doyoucompute.Section {
-	return helpers.SectionFactory("Features", func(s doyoucompute.Section) doyoucompute.Section {
+func features() (doyoucompute.Section, error) {
+	return doyoucompute.SectionFactory("Features", func(s *doyoucompute.Section) error {
 		s.WriteIntro().
 			Text("This package includes methods for creating the following documents:")
 
@@ -24,7 +23,7 @@ func features() doyoucompute.Section {
 			Text("For example, the Bug Report has exected and actual behavior, a section for example code, etc.").
 			Text("Each document requires minimal inputs - in some cases, no input is required.")
 
-		return s
+		return nil
 	})
 }
 
@@ -34,7 +33,7 @@ func basicUsage() (doyoucompute.Section, error) {
 		return doyoucompute.Section{}, err
 	}
 
-	return helpers.SectionFactory("Basic usage", func(s doyoucompute.Section) doyoucompute.Section {
+	return doyoucompute.SectionFactory("Basic usage", func(s *doyoucompute.Section) error {
 		s.WriteIntro().
 			Text("All documents support the functional options pattern to override defaults").
 			Text("If an input is required it is included as an attribute on the").
@@ -43,8 +42,8 @@ func basicUsage() (doyoucompute.Section, error) {
 
 		s.WriteCodeBlock("go", []string{string(sample)}, doyoucompute.Static)
 
-		return s
-	}), nil
+		return nil
+	})
 }
 
 func quickstart() (doyoucompute.Section, error) {
@@ -53,28 +52,38 @@ func quickstart() (doyoucompute.Section, error) {
 		return doyoucompute.Section{}, err
 	}
 
-	return helpers.SectionFactory("Quickstart", func(s doyoucompute.Section) doyoucompute.Section {
+	return doyoucompute.SectionFactory("Quickstart", func(s *doyoucompute.Section) error {
 		installation := s.CreateSection("Installation")
 		installation.WriteCodeBlock("bash", []string{"go get github.com/MoonMoon1919/doyoucompute-templates"}, doyoucompute.Static)
 
 		installation.AddSection(basics)
 
-		return s
-	}), nil
+		return nil
+	})
 }
 
-func disclaimers() doyoucompute.Section {
-	return helpers.SectionFactory("Disclaimers", func(s doyoucompute.Section) doyoucompute.Section {
+func disclaimers() (doyoucompute.Section, error) {
+	return doyoucompute.SectionFactory("Disclaimers", func(s *doyoucompute.Section) error {
 		s.WriteIntro().
 			Text("This work does not represent the interests or technologies of any employer, past or present.").
 			Text("It is a personal project only.")
 
-		return s
+		return nil
 	})
 }
 
 func ReadMe() (doyoucompute.Document, error) {
 	quickstartSection, err := quickstart()
+	if err != nil {
+		return doyoucompute.Document{}, err
+	}
+
+	featuresSection, err := features()
+	if err != nil {
+		return doyoucompute.Document{}, err
+	}
+
+	disclaimerSection, err := disclaimers()
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}
@@ -85,11 +94,11 @@ func ReadMe() (doyoucompute.Document, error) {
 			Intro: *doyoucompute.NewParagraph().
 				Text("A collection of common documents created by").
 				Link("doyoucompute.", "https://github.com/MoonMoon1919/doyoucompute"),
-			Features:   features(),
+			Features:   featuresSection,
 			QuickStart: quickstartSection,
 		},
 		[]doyoucompute.Section{
-			disclaimers(),
+			disclaimerSection,
 		},
 	)
 }
