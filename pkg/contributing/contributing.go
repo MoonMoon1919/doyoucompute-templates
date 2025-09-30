@@ -405,7 +405,7 @@ func New(projectUrl, issueTrackerUrl string, opts ...helpers.OptionsFunc[contrib
 		license:         DefaultLicense(),
 	}
 
-	err := helpers.ApplyOptions(props, opts...)
+	err := helpers.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}

@@ -111,7 +111,7 @@ func New(props ReadmeProps, additionalSections []doyoucompute.Section, opts ...h
 		license:      DefaultLicense(),
 	}
 
-	err := helpers.ApplyOptions(sProps, opts...)
+	err := helpers.ApplyOptions(&sProps, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}

@@ -137,7 +137,7 @@ func New(opts ...helpers.OptionsFunc[pullRequestProps]) (doyoucompute.Document, 
 		testing:      DefaultTesting(),
 	}
 
-	err := helpers.ApplyOptions(props, opts...)
+	err := helpers.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}

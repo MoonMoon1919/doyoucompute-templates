@@ -270,7 +270,7 @@ func New(opts ...helpers.OptionsFunc[bugReportProps]) (doyoucompute.Document, er
 		errors:             DefaultErrorMessages(),
 	}
 
-	err := helpers.ApplyOptions(props, opts...)
+	err := helpers.ApplyOptions(&props, opts...)
 	if err != nil {
 		return doyoucompute.Document{}, err
 	}

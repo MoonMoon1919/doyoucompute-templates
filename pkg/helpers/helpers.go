@@ -36,15 +36,15 @@ func DocumentBuilder(name string, appliers ...DocumentApplier) (doyoucompute.Doc
 	return document, nil
 }
 
-func ApplyOptions[T any](props T, opts ...OptionsFunc[T]) error {
+func ApplyOptions[T any](props *T, opts ...OptionsFunc[T]) error {
 	for _, opt := range opts {
-		postEffect, err := opt(&props)
+		postEffect, err := opt(props)
 		if err != nil {
 			return err
 		}
 
 		if postEffect != nil {
-			if err := postEffect(&props); err != nil {
+			if err := postEffect(props); err != nil {
 				return err
 			}
 		}
