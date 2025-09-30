@@ -5,7 +5,6 @@ import (
 
 	"github.com/MoonMoon1919/doyoucompute-templates/internal/docs"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/bugreport"
-	"github.com/MoonMoon1919/doyoucompute-templates/pkg/contributing"
 	"github.com/MoonMoon1919/doyoucompute-templates/pkg/pullrequest"
 	"github.com/MoonMoon1919/doyoucompute/pkg/app"
 )
@@ -23,10 +22,7 @@ func main() {
 		panic(err)
 	}
 
-	contributing, err := contributing.New(
-		"https://github.com/MoonMoon1919/doyoucompute-templates",
-		"https://github.com/MoonMoon1919/doyoucompute-templates/issues",
-	)
+	contributing, err := docs.Contributing()
 	if err != nil {
 		panic(err)
 	}

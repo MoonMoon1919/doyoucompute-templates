@@ -62,6 +62,48 @@ func quickstart() (doyoucompute.Section, error) {
 	})
 }
 
+func availableDocs() (doyoucompute.Section, error) {
+	return doyoucompute.SectionFactory("Available documents", func(s *doyoucompute.Section) error {
+		s.WriteIntro().
+			Text("This package contains several different documents, each with configurable options")
+
+		s.WriteParagraph().
+			Text("For additional example usage").
+			Text("See the docs in").
+			Link("the docs and samples directory.", "./internal")
+
+		readmeSection := s.CreateSection("README")
+		readmeSection.WriteIntro().
+			Text("README containing configurable introductory paragraph, features and quickstart sections").
+			Text("an option to insert other content and default license and contributing sections with options for overrides.")
+
+		readmeSection.WriteParagraph().Text("See").Link("the module", "./pkg/readme/readme.go").Text("for full details.")
+
+		bugreportSection := s.CreateSection("Bug Report")
+		bugreportSection.WriteIntro().
+			Text("Bug Report template with Frontmatter for GitHub Issues.").
+			Text("Contains defaults for expected/actual behavior, environment details,").
+			Text("reproduction steps, code samples, and errors with options for overrides.")
+
+		bugreportSection.WriteParagraph().Text("See").Link("the module", "./pkg/bugreport/bugreport.go").Text("for full details.")
+
+		pullrequestSection := s.CreateSection("Pull Request")
+		pullrequestSection.WriteIntro().
+			Text("Pull Request template with default sections for description, issue link, and how it was tested with options for overrides.")
+
+		pullrequestSection.WriteParagraph().Text("See").Link("the module", "./pkg/pullrequest/pullrequest.go").Text("for full details.")
+
+		contributingSection := s.CreateSection("Contributing")
+		contributingSection.WriteIntro().
+			Text("Contributing document containing configurable sections for getting started, contribution guidelines, writing docs, and reporting bugs").
+			Text("with configurable overrides.")
+
+		contributingSection.WriteParagraph().Text("See").Link("the module", "./pkg/contributing/contributing.go").Text("for full details.")
+
+		return nil
+	})
+}
+
 func disclaimers() (doyoucompute.Section, error) {
 	return doyoucompute.SectionFactory("Disclaimers", func(s *doyoucompute.Section) error {
 		s.WriteIntro().
@@ -88,6 +130,11 @@ func ReadMe() (doyoucompute.Document, error) {
 		return doyoucompute.Document{}, err
 	}
 
+	availableDocsSection, err := availableDocs()
+	if err != nil {
+		return doyoucompute.Document{}, err
+	}
+
 	return readme.New(
 		readme.ReadmeProps{
 			Name: "DOYOUCOMPUTE-TEMPLATES",
@@ -98,6 +145,7 @@ func ReadMe() (doyoucompute.Document, error) {
 			QuickStart: quickstartSection,
 		},
 		[]doyoucompute.Section{
+			availableDocsSection,
 			disclaimerSection,
 		},
 	)

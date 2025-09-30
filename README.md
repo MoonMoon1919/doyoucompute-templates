@@ -81,6 +81,36 @@ func Basics() {
 
 ```
 
+## Available documents
+
+This package contains several different documents, each with configurable options
+
+For additional example usage See the docs in [the docs and samples directory.](./internal)
+
+### README
+
+README containing configurable introductory paragraph, features and quickstart sections an option to insert other content and default license and contributing sections with options for overrides.
+
+See [the module](./pkg/readme/readme.go) for full details.
+
+### Bug Report
+
+Bug Report template with Frontmatter for GitHub Issues. Contains defaults for expected/actual behavior, environment details, reproduction steps, code samples, and errors with options for overrides.
+
+See [the module](./pkg/bugreport/bugreport.go) for full details.
+
+### Pull Request
+
+Pull Request template with default sections for description, issue link, and how it was tested with options for overrides.
+
+See [the module](./pkg/pullrequest/pullrequest.go) for full details.
+
+### Contributing
+
+Contributing document containing configurable sections for getting started, contribution guidelines, writing docs, and reporting bugs with configurable overrides.
+
+See [the module](./pkg/contributing/contributing.go) for full details.
+
 ## Disclaimers
 
 This work does not represent the interests or technologies of any employer, past or present. It is a personal project only.

@@ -101,8 +101,10 @@ If you can't find an existing report, create a new issue and fill out the bug re
 
 Read the [README](./README.md) to understand the project's structure and how it's used.
 
-Look for documentation that is unclear, incomplete, or outdated and update it.
+Look for documentation that is unclear, incomplete, or outdated.
+
+Update the appropriate file in the [docs folder](./internal/docs) since we're using doyoucompute to generate documents.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the project's [License.](./LICENSE)
+By contributing, you agree that your contributions will be licensed under the project's [MIT License.](./LICENSE)
