@@ -65,8 +65,8 @@ func WithLicense(name, path string) doyoucompute.OptionBuilder[ReadmeProps] {
 	return func(p *ReadmeProps) (doyoucompute.Finalizer[ReadmeProps], error) {
 		section, _ := doyoucompute.SectionFactory("License", func(s *doyoucompute.Section) error {
 			s.WriteIntro().
-				Text(fmt.Sprintf("%s license", name)).
-				Text("See").
+				Text(fmt.Sprintf("%s License -", name)).
+				Text("see").
 				Link("LICENSE", path).
 				Text("for details.")
 
