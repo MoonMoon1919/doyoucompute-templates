@@ -79,6 +79,23 @@ func WithLicense(name, path string) doyoucompute.OptionBuilder[ReadmeProps] {
 	}
 }
 
+func WithContributing(path string) doyoucompute.OptionBuilder[ReadmeProps] {
+	return func(p *ReadmeProps) (doyoucompute.Finalizer[ReadmeProps], error) {
+		section, _ := doyoucompute.SectionFactory("Contributing", func(s *doyoucompute.Section) error {
+			s.WriteIntro().
+				Text("See").
+				Link("CONTRIBUTING", path).
+				Text("for details.")
+
+			return nil
+		})
+
+		p.contributing = section
+
+		return nil, nil
+	}
+}
+
 // DefaultContributing returns the default contributing section.
 func DefaultContributing() doyoucompute.Section {
 	section, _ := doyoucompute.SectionFactory("Contributing", func(s *doyoucompute.Section) error {
